@@ -1,20 +1,23 @@
 import functools
-
-
-class Translator:
-    def gettext(self, s):
-        return s
+import gettext
 
 
 class I18n:
     def configure(self, settings):
         self.settings = settings
 
-    def __call__(self, handler):
+    def gettranslator(self, req):
+        return gettext.translation(
+            domain=self.settings.domain,
+            localedir=self.settings.directory,
+            languages=req.locales,
+            fallback=True,
+        )
 
+    def __call__(self, handler):
         @functools.wraps(handler)
         def wrapper(req, *a, **kw):
-            req.translator = Translator()
+            req.translator = self.gettranslator(req)
             return handler(req, *a, **kw)
 
         return wrapper

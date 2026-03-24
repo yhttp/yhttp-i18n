@@ -6,7 +6,7 @@ from yhttp.core import text
 from yhttp.ext.i18n import install
 
 
-def test_extension(httpreq, app, tempdir, mocker):
+def test_extension(httpreq, app, tempdir):
     install(app)
     i18ndirectory = os.path.join(tempdir, 'i18n')
     app.settings.i18n.directory = i18ndirectory

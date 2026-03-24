@@ -7,5 +7,3 @@
 
 Internationalization and localization extension for 
 [yhttp](https://github.com/yhttp/yhttp).
-
-
