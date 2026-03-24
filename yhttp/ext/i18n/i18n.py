@@ -9,7 +9,7 @@ class I18n:
     def gettranslator(self, req):
         return gettext.translation(
             domain=self.settings.domain,
-            localedir=self.settings.directory,
+            localedir=self.settings.localedirectory,
             languages=req.locales,
             fallback=True,
         )

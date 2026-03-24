@@ -4,7 +4,7 @@ import bddrest
 import pytest
 from yhttp.core import Application
 
-from yhttp.dev.fixtures import tempdir
+from yhttp.dev.fixtures import tempdir, mockupfs, bddcli_bootstrapper_patch
 
 
 @pytest.fixture

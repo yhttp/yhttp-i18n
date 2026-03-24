@@ -8,7 +8,8 @@ PYDEPS_COMMON = \
 	'pytest-mock' \
 	'bddrest >= 6.1, < 7' \
 	'bddcli >= 2.5.1, < 3' \
-	'yhttp-dev >= 3.2.4'
+	'yhttp-dev >= 3.4' \
+	'mako'
 
 
 # Assert the python-makelib version
