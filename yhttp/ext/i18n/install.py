@@ -11,7 +11,7 @@ default: en-US
 def install(app):
     app.cliarguments.append(I18nCLI)
     app.settings.merge('i18n: {}')
-    app.settings.i18n..merge(DEFAULT_SETTINGS)
+    app.settings.i18n.merge(DEFAULT_SETTINGS)
     app.i18n = I18n()
 
     @app.when
