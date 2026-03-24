@@ -1,0 +1,87 @@
+name: Build 
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ 'v*' ]
+
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: Pytest
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+    env:
+      PREFIX: /usr 
+      FLAKE8: flake8
+      PYTEST: pytest
+      COVERAGE: coverage
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        sudo git clone https://github.com/pylover/python-makelib.git /usr/local/lib/python-makelib
+        make install-common editable-install
+        sudo cp `which bddcli-bootstrapper` /usr/local/bin
+    - name: Lint
+      run: make lint
+    - name: Test
+      run: make cover
+    - name: Coveralls
+      run: coveralls
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  coveralls-finish:
+    name: Coveralls finish
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+    - name: Install dependencies
+      run: python -m pip install coveralls
+    - name: Coveralls Finished
+      run: coveralls --finish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    name: Github Release
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: ${{ github.ref }}
+        draft: false
+        prerelease: false 
