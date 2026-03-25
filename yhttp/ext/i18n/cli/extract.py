@@ -14,9 +14,6 @@ CATALOG_HEADER = \
     '# Copyright (C) YEAR ORGANIZATION\n'
 
 
-# '# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.\n#'
-
-
 class ExtractCommand(SubCommand):
     __command__ = 'extract'
     __aliases__ = ['e']
@@ -220,10 +217,3 @@ class ExtractCommand(SubCommand):
                 sort_output=False,
                 width=79,
             )
-
-
-class I18nCLI(SubCommand):
-    __command__ = 'i18n'
-    __arguments__ = [
-        ExtractCommand,
-    ]
