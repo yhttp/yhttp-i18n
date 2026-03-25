@@ -3,6 +3,7 @@ from easycli import SubCommand
 from .extract import ExtractCommand
 from .init import InitCommand
 from .update import UpdateCommand
+from .compile import CompileCommand
 
 
 class I18nCLI(SubCommand):
@@ -11,4 +12,5 @@ class I18nCLI(SubCommand):
         ExtractCommand,
         InitCommand,
         UpdateCommand,
+        CompileCommand,
     ]
