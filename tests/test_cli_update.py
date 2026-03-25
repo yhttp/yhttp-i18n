@@ -87,8 +87,7 @@ def test_init_minimal(mockupfs, bddcli_bootstrapper_patch):
         assert stderr == ''
         assert status == 0
         assert stdout == \
-            f'Updating catalog {tmpfs}/fa/LC_MESSAGES/messages.po ' \
-            f'based on {tmpfs}/messages.pot\n'
+            f'Updating catalog {outfile} based on {tmpfs}/messages.pot\n'
 
         assert os.path.exists(outfile)
         with open(outfile) as f:
