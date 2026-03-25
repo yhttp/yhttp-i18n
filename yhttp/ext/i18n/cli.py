@@ -1,5 +1,6 @@
 import os
 import sys
+import fnmatch
 
 from babel.messages.extract import extract_from_dir
 from babel.messages.pofile import write_po
@@ -38,6 +39,24 @@ class ExtractCommand(SubCommand):
             help='Output locale catalog directory, default is the value '
                  'specified in the Application settings key: '
                  'i18n.localedirectory.'
+        ),
+        Argument(
+            '--ignore-file',
+            dest='ignore_files',
+            metavar='PATTERN',
+            default=[],
+            action='append',
+            help='Wildcard pattern to ignore files, this option can be'
+                 ' specified multiple times.'
+        ),
+        Argument(
+            '--ignore-directory',
+            dest='ignore_directories',
+            metavar='PATTERN',
+            default=[],
+            action='append',
+            help='Wildcard pattern to ignore directories, this option can be'
+                 ' specified multiple times.'
         ),
         Argument(
             '--domain',
@@ -85,10 +104,25 @@ class ExtractCommand(SubCommand):
 
         return callback
 
-    # def _dirfilter(self, *a, **kw):
-    #     pass
+    def _make_directoryfilter(self, patterns):
+        """
+        Build a directory_filter function based on a list of ignore patterns.
+        """
+        ignore_patterns = [
+            '.*',
+            '_*',
+        ]
+        ignore_patterns.extend(patterns)
 
-    def _extract(self, catalog, directory, method_map, options_map):
+        def filter(dirname):
+            basename = os.path.basename(dirname)
+            return not any(
+                fnmatch.fnmatch(basename, p) for p in ignore_patterns
+            )
+
+        return filter
+
+    def _extract(self, catalog, directory, method_map, options_map, ignore):
         print(f'Extracting messages from: {directory}')
         extracted = extract_from_dir(
             dirname=directory,
@@ -111,7 +145,7 @@ class ExtractCommand(SubCommand):
             comment_tags=['TRANSLATOR:', 'NOTE:'],
             callback=self._onfile(directory),
             strip_comment_tags=False,
-            # directory_filter=self._dirfilter,
+            directory_filter=self._make_directoryfilter(ignore),
         )
 
         for filename, lineno, message, comments, context in extracted:
@@ -130,7 +164,12 @@ class ExtractCommand(SubCommand):
         app.ready()
         settings = app.i18n.settings
 
-        method_map = [('**.py', 'python')]
+        method_map = [
+            ('**.py', 'python'),
+        ]
+        for i in args.ignore_files:
+            method_map.append((i, 'ignore'))
+
         options_map = {}
         if args.mako:
             # ensure mako is installed already
@@ -145,15 +184,10 @@ class ExtractCommand(SubCommand):
             options_map['**.mako'] = {'encoding': 'utf-8'}
 
         if not args.output_file:
-            if args.locale_directory:
-                localedir = args.locale_directory
-            else:
-                localedir = settings.localedirectory
-
-            if args.domain:
-                domain = args.domain
-            else:
-                domain = settings.domain
+            domain = args.domain if args.domain else settings.domain
+            localedir = args.locale_directory \
+                if args.locale_directory \
+                else settings.localedirectory
 
             args.output_file = os.path.join(localedir, f'{domain}.pot')
 
@@ -172,7 +206,8 @@ class ExtractCommand(SubCommand):
             )
 
             for d in args.directories:
-                self._extract(catalog, d, method_map, options_map)
+                self._extract(catalog, d, method_map, options_map,
+                              args.ignore_directories)
 
             print(f'Writing PO template file to {args.output_file}')
             write_po(
