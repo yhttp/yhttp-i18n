@@ -10,19 +10,12 @@ _app = Application('0.1.0', 'foo')
 install(_app)
 
 
-def test_cli_help():
-    cliapp = CLIApplication('foo', 'tests.test_cli:_app.climain')
-    with Given(cliapp, 'i18n --help'):
-        assert status == 0
-        assert stderr == ''
-
-
 def test_extract_minimal(mockupfs, tempdir, bddcli_bootstrapper_patch):
     tmpfs = mockupfs(**{
         'foo.py': 'foo = _(\'foo\')',
     })
 
-    cliapp = CLIApplication('foo', 'tests.test_cli:_app.climain')
+    cliapp = CLIApplication('foo', f'{__name__}:_app.climain')
     args = [
         'i18n',
         'extract',
@@ -76,7 +69,7 @@ def test_extract(mockupfs, tempdir, bddcli_bootstrapper_patch):
         }
     })
 
-    cliapp = CLIApplication('foo', 'tests.test_cli:_app.climain')
+    cliapp = CLIApplication('foo', f'{__name__}:_app.climain')
     args = [
         'i18n',
         'extract',
