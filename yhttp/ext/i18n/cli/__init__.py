@@ -2,6 +2,7 @@ from easycli import SubCommand
 
 from .extract import ExtractCommand
 from .init import InitCommand
+from .update import UpdateCommand
 
 
 class I18nCLI(SubCommand):
@@ -9,4 +10,5 @@ class I18nCLI(SubCommand):
     __arguments__ = [
         ExtractCommand,
         InitCommand,
+        UpdateCommand,
     ]
