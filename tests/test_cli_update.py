@@ -61,7 +61,7 @@ PO = \
     'msgstr "فو"\n\n'
 
 
-def test_init_minimal(mockupfs, bddcli_bootstrapper_patch):
+def test_init_minimal(mockupfs, bddcli_bootpatch):
     tmpfs = mockupfs(**{
         'messages.pot': POT,
         'fa': {
@@ -83,7 +83,7 @@ def test_init_minimal(mockupfs, bddcli_bootstrapper_patch):
         'freezegun.freeze_time("2012-02-14 12:00:01").start()\n'
 
     outfile = f'{tmpfs}/fa/LC_MESSAGES/messages.po'
-    with bddcli_bootstrapper_patch(freezetime), Given(cliapp, args):
+    with bddcli_bootpatch(freezetime), Given(cliapp, args):
         assert stderr == ''
         assert status == 0
         assert stdout == \

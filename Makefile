@@ -7,7 +7,7 @@ PYDEPS_COMMON = \
 	'freezegun' \
 	'pytest-mock' \
 	'bddrest >= 6.1, < 7' \
-	'bddcli >= 2.5.1, < 3' \
+	'bddcli >= 2.10.1, < 3' \
 	'yhttp-dev >= 3.4.2' \
 	'mako'
 

@@ -42,7 +42,7 @@ PO = \
     'msgstr "qux"\n'
 
 
-def test_init_minimal(mockupfs, bddcli_bootstrapper_patch):
+def test_init_minimal(mockupfs, bddcli_bootpatch):
     tmpfs = mockupfs(**{
         'fa': {
             'LC_MESSAGES': {
@@ -65,7 +65,7 @@ def test_init_minimal(mockupfs, bddcli_bootstrapper_patch):
 
     infile = f'{tmpfs}/fa/LC_MESSAGES/messages.po'
     outfile = f'{tmpfs}/fa/LC_MESSAGES/messages.mo'
-    with bddcli_bootstrapper_patch(freezetime), Given(cliapp, args):
+    with bddcli_bootpatch(freezetime), Given(cliapp, args):
         assert stderr == ''
         assert status == 0
         print(stdout)

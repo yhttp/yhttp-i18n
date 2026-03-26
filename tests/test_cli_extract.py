@@ -10,7 +10,7 @@ _app = Application('0.1.0', 'foo')
 install(_app)
 
 
-def test_extract_minimal(mockupfs, tempdir, bddcli_bootstrapper_patch):
+def test_extract_minimal(mockupfs, tempdir, bddcli_bootpatch):
     tmpfs = mockupfs(**{
         'foo.py': 'foo = _(\'foo\')',
     })
@@ -27,7 +27,7 @@ def test_extract_minimal(mockupfs, tempdir, bddcli_bootstrapper_patch):
     freezetime = \
         'import freezegun;' \
         'freezegun.freeze_time("2012-01-14 12:00:01").start()\n'
-    with bddcli_bootstrapper_patch(freezetime), Given(cliapp, args):
+    with bddcli_bootpatch(freezetime), Given(cliapp, args):
         assert stderr == ''
         assert status == 0
         assert stdout == \
@@ -59,7 +59,7 @@ def test_extract_minimal(mockupfs, tempdir, bddcli_bootstrapper_patch):
             'msgstr ""\n\n'
 
 
-def test_extract(mockupfs, tempdir, bddcli_bootstrapper_patch):
+def test_extract(mockupfs, tempdir, bddcli_bootpatch):
     tmpfs = mockupfs(**{
         'foo.py': 'foo = _(\'foo\')',
         'baz.txt': '_(\'baz\')',
@@ -92,14 +92,14 @@ def test_extract(mockupfs, tempdir, bddcli_bootstrapper_patch):
         '        raise ModuleNotFoundError(f"No module named \'{m}\'")\n' \
         '    return __import_backup__(m, *a, **kw)\n' \
         'builtins.__import__ = __import_wrapper__\n'
-    with bddcli_bootstrapper_patch(makopatch), Given(cliapp, args):
+    with bddcli_bootpatch(makopatch), Given(cliapp, args):
         assert stderr == 'Mako must be installed when using `--mako` flag\n'
         assert status == 255
 
     freezetime = \
         'import freezegun;' \
         'freezegun.freeze_time("2012-01-14 12:00:01").start()\n'
-    with bddcli_bootstrapper_patch(freezetime), Given(cliapp, args):
+    with bddcli_bootpatch(freezetime), Given(cliapp, args):
         assert stderr == ''
         assert status == 0
         assert stdout == \
