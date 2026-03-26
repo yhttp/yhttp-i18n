@@ -62,7 +62,11 @@ def test_extract_minimal(mockupfs, tempdir, bddcli_bootpatch):
 
 def test_extract(mockupfs, tempdir, bddcli_bootpatch):
     tmpfs = mockupfs(**{
-        'foo.py': 'foo = _(\'foo\')',
+        'foo.py':
+            '_(\'foo\')\n'
+            'N_(\'%d file\', \'%d files\', 2)\n'
+            'P_(\'verb\', \'help\')\n'
+            'NP_(\'noun\', \'%d file\', \'%d files\', 1)\n',
         'baz.txt': '_(\'baz\')',
         'foo.mako': '${_(\'bar\')}',
         'build': {
@@ -134,4 +138,23 @@ def test_extract(mockupfs, tempdir, bddcli_bootpatch):
             '\n' \
             f'#: {tmpfs}/foo.py:1\n' \
             'msgid "foo"\n' \
-            'msgstr ""\n\n'
+            'msgstr ""\n' \
+            '\n' \
+            f'#: {tmpfs}/foo.py:2\n' \
+            '#, python-format\n' \
+            'msgid "%d file"\n' \
+            'msgstr ""\n' \
+            '\n' \
+            f'#: {tmpfs}/foo.py:3\n' \
+            'msgctxt "verb"\n' \
+            'msgid "help"\n' \
+            'msgstr ""\n' \
+            '\n' \
+            f'#: {tmpfs}/foo.py:4\n' \
+            '#, python-format\n' \
+            'msgctxt "noun"\n' \
+            'msgid "%d file"\n' \
+            'msgid_plural "%d files"\n' \
+            'msgstr[0] ""\n' \
+            'msgstr[1] ""\n' \
+            '\n'
