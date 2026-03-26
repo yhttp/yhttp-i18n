@@ -36,7 +36,10 @@ setup(
     install_requires=dependencies,
     packages=find_namespace_packages(
         where='.',
-        include=['yhttp.ext.i18n'],
+        include=[
+            'yhttp.ext.i18n',
+            'yhttp.ext.i18n.cli',
+        ],
         exclude=['tests'],
     ),
     classifiers=[
