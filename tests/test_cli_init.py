@@ -17,7 +17,7 @@ POT = \
     'msgstr ""\n' \
     '"Project-Id-Version: foo 0.1.0\\n"\n' \
     '"Report-Msgid-Bugs-To: alice@example.com\\n"\n' \
-    '"POT-Creation-Date: 2012-01-14 16:00+0400\\n"\n' \
+    '"POT-Creation-Date: 2012-01-14 12:00+0000\\n"\n' \
     '"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"\n' \
     '"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n"\n' \
     '"Language-Team: Alice\\n"\n' \
@@ -71,8 +71,8 @@ def test_init_minimal(mockupfs, bddcli_bootpatch):
             'msgstr ""\n' \
             '"Project-Id-Version: foo 0.1.0\\n"\n' \
             '"Report-Msgid-Bugs-To: alice@example.com\\n"\n' \
-            '"POT-Creation-Date: 2012-01-14 16:00+0400\\n"\n' \
-            '"PO-Revision-Date: 2012-01-14 16:00+0400\\n"\n' \
+            '"POT-Creation-Date: 2012-01-14 12:00+0000\\n"\n' \
+            '"PO-Revision-Date: 2012-02-14 12:00+0000\\n"\n' \
             '"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n"\n' \
             '"Language: fa\\n"\n' \
             '"Language-Team: Alice\\n"\n' \

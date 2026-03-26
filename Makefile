@@ -1,6 +1,7 @@
 VENV_NAME = yhttp
 PKG_NAMESPACE = yhttp.ext.i18n
 PKG_NAME = yhttp-i18n
+TIMEZONE = UTC
 PYTEST_FLAGS = -vv
 PYDEPS_COMMON = \
 	'coveralls' \
