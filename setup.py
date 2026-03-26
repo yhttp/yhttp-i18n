@@ -38,7 +38,6 @@ setup(
         where='.',
         include=[
             'yhttp.ext.i18n',
-            'yhttp.ext.i18n.cli',
         ],
         exclude=['tests'],
     ),
