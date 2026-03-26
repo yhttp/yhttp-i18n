@@ -1,5 +1,5 @@
 from .install import install
-from .application import LangRewriteApplication
+from .rewrite import create_rewriter
 
 
-__version__ = '1.3.0'
+__version__ = '1.4.0'
