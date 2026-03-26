@@ -80,7 +80,7 @@ def test_init_minimal(mockupfs, bddcli_bootpatch):
 
     freezetime = \
         'import freezegun;' \
-        'freezegun.freeze_time("2012-02-14 12:00:01").start()\n'
+        'freezegun.freeze_time("2012-02-14 12:00:01+0000").start()\n'
 
     outfile = f'{tmpfs}/fa/LC_MESSAGES/messages.po'
     with bddcli_bootpatch(freezetime), Given(cliapp, args):

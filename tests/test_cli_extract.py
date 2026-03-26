@@ -26,7 +26,8 @@ def test_extract_minimal(mockupfs, tempdir, bddcli_bootpatch):
 
     freezetime = \
         'import freezegun;' \
-        'freezegun.freeze_time("2012-01-14 12:00:01").start()\n'
+        'freezegun.freeze_time("2012-02-14 12:00:01+0000").start()\n'
+
     with bddcli_bootpatch(freezetime), Given(cliapp, args):
         assert stderr == ''
         assert status == 0
