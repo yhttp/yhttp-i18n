@@ -13,7 +13,7 @@ def test_extension(httpreq, app, tempdir):
     app.ready()
 
     assert app.i18n
-    assert app.i18n.settings.directory == i18ndirectory
+    assert app.settings.i18n.directory == i18ndirectory
 
     @app.route()
     @app.i18n

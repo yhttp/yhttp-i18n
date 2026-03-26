@@ -48,7 +48,7 @@ class InitCommand(SubCommand):
     def __call__(self, args):
         app = args.application
         app.ready()
-        settings = app.i18n.settings
+        settings = app.settings.i18n
         domain = args.domain if args.domain else settings.domain
         localedir = args.locale_directory \
             if args.locale_directory \

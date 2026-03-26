@@ -161,7 +161,7 @@ class ExtractCommand(SubCommand):
     def __call__(self, args):
         app = args.application
         app.ready()
-        settings = app.i18n.settings
+        settings = app.settings.i18n
 
         method_map = [
             ('**.py', 'python'),
