@@ -21,22 +21,27 @@ def test_langrewriteapp(app, httpreq):
     def get(req):
         return 'Special Foo'
 
-    @app.route(r'/foo')
+    @app.route(r'/(.*)?')
     @json
-    def get(req):
-        return req.locales
+    def get(req, arg):
+        return dict(locales=req.locales, arg=arg)
 
     with httpreq(path='/lang: en/foo'):
         assert status == 200
-        assert response.json == ['en-US']
+        assert response.json == dict(locales=['en-US'], arg='foo')
 
         when(path_parameters=given | dict(lang='fa'))
         assert status == 200
-        assert response.json == ['fa-IR']
+        assert response.json == dict(locales=['fa-IR'], arg='foo')
 
         when(path_parameters=given | dict(lang='ar'))
-        assert status == 404
+        assert status == 200
+        assert response.json == dict(locales=['*'], arg='ar/foo')
 
         when(path_parameters=given | dict(lang='es'))
         assert status == 200
         assert response.json == 'Special Foo'
+
+        when(path='/fa')
+        assert status == 200
+        assert response.json == dict(locales=['fa-IR'], arg='')
