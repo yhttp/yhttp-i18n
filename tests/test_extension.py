@@ -1,7 +1,7 @@
 import os
 
-from bddrest import status, response
-from yhttp.core import text
+from bddrest import status, response, when
+from yhttp.core import json
 
 from yhttp.ext.i18n import install
 
@@ -17,10 +17,23 @@ def test_extension(httpreq, app, tempdir):
 
     @app.route()
     @app.i18n
-    @text
+    @json
     def get(req):
-        return req.translator.gettext('foo')
+        return dict(
+            message=req.translator.gettext('foo'),
+            rtl=req.locale.rtl
+        )
 
     with httpreq():
         assert status == 200
-        assert response == 'foo'
+        assert response == dict(
+            message='foo',
+            rtl=False
+        )
+
+        when(headers={'accept-languages': 'fa'})
+        assert status == 200
+        assert response == dict(
+            message='foo',
+            rtl=True
+        )
