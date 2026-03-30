@@ -3,4 +3,4 @@ from .rewrite import create_rewriter
 from .locale import Locale
 
 
-__version__ = '1.5.0'
+__version__ = '1.6.0'

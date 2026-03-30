@@ -111,6 +111,7 @@ class ExtractCommand(SubCommand):
         ignore_patterns = [
             '.*',
             '_*',
+            'tests',
         ]
         ignore_patterns.extend(patterns)
 
