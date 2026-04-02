@@ -42,8 +42,8 @@ PO = \
     'msgstr "qux"\n'
 
 
-def test_init_minimal(mockupfs, bddcli_bootpatch):
-    tmpfs = mockupfs(**{
+def test_init_minimal(mktmptree, bddcli_bootpatch):
+    tmpfs = mktmptree({
         'fa': {
             'LC_MESSAGES': {
                 'messages.po': PO

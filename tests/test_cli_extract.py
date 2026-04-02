@@ -10,8 +10,8 @@ _app = Application('0.1.0', 'foo')
 install(_app)
 
 
-def test_extract_minimal(mockupfs, tempdir, bddcli_bootpatch):
-    tmpfs = mockupfs(**{
+def test_extract_minimal(mktmptree, tmpdir, bddcli_bootpatch):
+    tmpfs = mktmptree({
         'foo.py': 'foo = _(\'foo\')',
     })
 
@@ -19,10 +19,10 @@ def test_extract_minimal(mockupfs, tempdir, bddcli_bootpatch):
     args = [
         'i18n',
         'extract',
-        f'--locale-directory {tempdir}',
+        f'--locale-directory {tmpdir}',
         tmpfs
     ]
-    outfile = f'{tempdir}/messages.pot'
+    outfile = f'{tmpdir}/messages.pot'
 
     freezetime = \
         'import freezegun;' \
@@ -35,7 +35,7 @@ def test_extract_minimal(mockupfs, tempdir, bddcli_bootpatch):
             f'Extracting messages from: {tmpfs}\n' \
             f'Extracting messages from {tmpfs}/foo.py\n' \
             f'Writing PO template file to {outfile}\n'
-        assert os.path.exists(f'{tempdir}/messages.pot')
+        assert os.path.exists(f'{tmpdir}/messages.pot')
         with open(outfile) as f:
             content = f.read()
 
@@ -60,8 +60,8 @@ def test_extract_minimal(mockupfs, tempdir, bddcli_bootpatch):
             'msgstr ""\n\n'
 
 
-def test_extract(mockupfs, tempdir, bddcli_bootpatch):
-    tmpfs = mockupfs(**{
+def test_extract(mktmptree, tmpdir, bddcli_bootpatch):
+    tmpfs = mktmptree({
         'foo.py':
             '_(\'foo\')\n'
             'N_(\'%d file\', \'%d files\', 2)\n'
@@ -83,11 +83,11 @@ def test_extract(mockupfs, tempdir, bddcli_bootpatch):
         '--ignore-directory build',
         '--copyright "foo bar"',
         '--language-team Alice',
-        f'--locale-directory {tempdir}',
+        f'--locale-directory {tmpdir}',
         '--email alice@example.com',
         tmpfs
     ]
-    outfile = f'{tempdir}/messages.pot'
+    outfile = f'{tmpdir}/messages.pot'
 
     # patch bddcli bootstrapper to emulate mako is not installed
     makopatch = \
@@ -112,7 +112,7 @@ def test_extract(mockupfs, tempdir, bddcli_bootpatch):
             f'Extracting messages from {tmpfs}/foo.mako (encoding="utf-8")\n' \
             f'Extracting messages from {tmpfs}/foo.py\n' \
             f'Writing PO template file to {outfile}\n'
-        assert os.path.exists(f'{tempdir}/messages.pot')
+        assert os.path.exists(f'{tmpdir}/messages.pot')
         with open(outfile) as f:
             content = f.read()
 

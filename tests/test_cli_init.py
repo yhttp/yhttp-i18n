@@ -35,8 +35,8 @@ POT = \
     'msgstr ""\n\n'
 
 
-def test_init_minimal(mockupfs, bddcli_bootpatch):
-    tmpfs = mockupfs(**{
+def test_init_minimal(mktmptree, bddcli_bootpatch):
+    tmpfs = mktmptree({
         'messages.pot': POT,
     })
 

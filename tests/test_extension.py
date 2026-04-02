@@ -6,9 +6,9 @@ from yhttp.core import json
 from yhttp.ext.i18n import install
 
 
-def test_extension(httpreq, app, tempdir):
+def test_extension(httpreq, app, tmpdir):
     install(app)
-    i18ndirectory = os.path.join(tempdir, 'i18n')
+    i18ndirectory = os.path.join(tmpdir, 'i18n')
     app.settings.i18n.directory = i18ndirectory
     app.ready()
 
