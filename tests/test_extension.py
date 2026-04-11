@@ -12,11 +12,9 @@ def test_extension(httpreq, app, tmpdir):
     app.settings.i18n.directory = i18ndirectory
     app.ready()
 
-    assert app.i18n
     assert app.settings.i18n.directory == i18ndirectory
 
     @app.route()
-    @app.i18n
     @json
     def get(req):
         return dict(

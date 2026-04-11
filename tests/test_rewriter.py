@@ -1,20 +1,14 @@
 from bddrest import status, response, when, given
-from yhttp.core import json, Request
+from yhttp.core import json
 
-from yhttp.ext.i18n import create_rewriter
+from yhttp.ext.i18n import Rewriter, install
 
 
 def test_langrewriteapp(app, httpreq):
-    rewrite = create_rewriter(dict(
+    install(app, rewriter=Rewriter(dict(
         en='en-US',
         fa='fa-IR',
-    ))
-
-    def create_request(app, environ, response):
-        rewrite(environ)
-        return Request(app, environ, response)
-
-    app.request_factory = create_request
+    )))
 
     @app.route(r'/es/foo')
     @json
@@ -45,3 +39,11 @@ def test_langrewriteapp(app, httpreq):
         when(path='/fa')
         assert status == 200
         assert response.json == dict(locales=['fa-IR'], arg='')
+
+        when(path='/foo')
+        assert status == 200
+        assert response.json == dict(locales=['*'], arg='foo')
+
+        when(path='/')
+        assert status == 200
+        assert response.json == dict(locales=['*'], arg='')
