@@ -1,5 +1,6 @@
+from functools import cached_property
+
 import babel
-from yhttp.core import lazyattribute
 
 
 RTL_LANGUAGES = [
@@ -20,6 +21,6 @@ RTL_LANGUAGES = [
 
 
 class Locale(babel.Locale):
-    @lazyattribute
+    @cached_property
     def rtl(self):
         return self.language in RTL_LANGUAGES
