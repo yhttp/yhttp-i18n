@@ -24,3 +24,7 @@ class Locale(babel.Locale):
     @cached_property
     def rtl(self):
         return self.language in RTL_LANGUAGES
+
+    @classmethod
+    def parse(cls, locale):
+        return super().parse(locale.replace('-', '_'))

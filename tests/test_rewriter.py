@@ -1,11 +1,11 @@
 from bddrest import status, response, when, given
 from yhttp.core import json
 
-from yhttp.ext.i18n import Rewriter, install
+from yhttp.ext.i18n import PathRewriterMiddleware, install
 
 
 def test_langrewriteapp(app, httpreq):
-    install(app, rewriter=Rewriter(dict(
+    install(app, rewriter=PathRewriterMiddleware(dict(
         en='en-US',
         fa='fa-IR',
     )))

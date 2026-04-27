@@ -1,5 +1,5 @@
 from .install import install
-from .rewriter import Rewriter
+from .middlewares import PathRewriterMiddleware
 from .locale import Locale
 
 

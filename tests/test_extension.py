@@ -29,7 +29,7 @@ def test_extension(httpreq, app, tmpdir):
             rtl=False
         )
 
-        when(headers={'accept-languages': 'fa'})
+        when(headers={'accept-languages': 'fa-IR'})
         assert status == 200
         assert response == dict(
             message='foo',
