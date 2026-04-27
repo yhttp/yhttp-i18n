@@ -4,7 +4,7 @@ from .middlewares import middleware
 
 DEFAULT_SETTINGS = '''
 domain: messages
-defaultlocale: en_US
+defaultlocale: en-US
 localedirectory: i18n
 '''
 
@@ -15,6 +15,7 @@ def install(app, rewriter=None):
     app.settings.i18n.merge(DEFAULT_SETTINGS)
 
     if rewriter:
+        rewriter.configure(app.settings.i18n)
         app.middlewares.append(rewriter)
 
     app.middlewares.append(middleware)

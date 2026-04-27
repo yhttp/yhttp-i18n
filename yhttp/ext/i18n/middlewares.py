@@ -1,6 +1,7 @@
 import re
 import gettext
-from urllib.parse import unquote
+
+from yhttp.core import statuses
 
 from .locale import Locale
 
@@ -21,16 +22,29 @@ def middleware(req):
 
 
 class PathRewriterMiddleware:
-    def __init__(self, languages: dict[str, str],
-                 pattern=r'^/([a-z]{2})(/.*)?'):
+    def __init__(self, languages: dict[str, str], defaultlanguage=None,
+                 pattern=r'^/([a-z]{2})(/.*)?', ignore=r'^/apiv\d+'):
         self._pattern = re.compile(pattern)
         self._languages = languages
+        self._ignore = re.compile(ignore)
+        self._defaultlanguage = defaultlanguage
+
+    def configure(self, settings):
+        if not self._defaultlanguage:
+            self._defaultlanguage = settings.defaultlocale.split('-', 1)[0]
 
     def __call__(self, req):
+        if self._ignore.match(req.path):
+            return
+
         match_ = self._pattern.match(req.path)
 
         if not match_:
-            return
+            lang = req.locales[0]
+            if lang == '*':
+                lang = self._defaultlanguage
+
+            raise statuses.found(f'/{lang}{req.fullpath.rstrip("/")}')
 
         lang = match_.group(1)
         if lang not in self._languages:

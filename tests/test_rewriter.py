@@ -45,5 +45,13 @@ def test_langrewriteapp(app, httpreq):
         assert response.json == dict(locales=['*'], arg='foo')
 
         when(path='/')
+        assert status == 302
+        assert response.headers['location'] == '/en'
+
+        when(path='/apiv1')
         assert status == 200
-        assert response.json == dict(locales=['*'], arg='')
+        assert response.json == dict(locales=['*'], arg='apiv1')
+
+        when(path='/apiv1/tokens')
+        assert status == 200
+        assert response.json == dict(locales=['*'], arg='apiv1/tokens')
