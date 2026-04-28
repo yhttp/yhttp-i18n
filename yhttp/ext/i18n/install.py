@@ -16,6 +16,6 @@ def install(app, rewriter=None):
 
     if rewriter:
         rewriter.configure(app.settings.i18n)
-        app.middlewares.append(rewriter)
+        app.request_middlewares.append(rewriter)
 
-    app.middlewares.append(middleware)
+    app.request_middlewares.append(middleware)

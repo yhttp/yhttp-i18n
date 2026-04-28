@@ -23,7 +23,8 @@ def middleware(req):
 
 class PathRewriterMiddleware:
     def __init__(self, languages: dict[str, str], defaultlanguage=None,
-                 pattern=r'^/([a-z]{2})(/.*)?', ignore=r'^/apiv\d+'):
+                 pattern=r'^/([a-z]{2})(?:$|/.*)',
+                 ignore=r'^/(apiv\d+|assets|media)'):
         self._pattern = re.compile(pattern)
         self._languages = languages
         self._ignore = re.compile(ignore)
@@ -34,10 +35,11 @@ class PathRewriterMiddleware:
             self._defaultlanguage = settings.defaultlocale.split('-', 1)[0]
 
     def __call__(self, req):
-        if self._ignore.match(req.path):
+        reqpath = req.path
+        if self._ignore.match(reqpath):
             return
 
-        match_ = self._pattern.match(req.path)
+        match_ = self._pattern.match(reqpath)
 
         if not match_:
             lang = req.locales[0]
@@ -51,7 +53,8 @@ class PathRewriterMiddleware:
             return
 
         req.locales = [self._languages[lang]]
-        if len(req.path) == 3:
-            req.path += '/'
+        if len(reqpath) == 3:
+            reqpath += '/'
 
-        req.path = req.path[3:]
+        req.originalpath = reqpath
+        req.path = reqpath[3:]

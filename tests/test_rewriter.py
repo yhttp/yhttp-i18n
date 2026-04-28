@@ -40,13 +40,21 @@ def test_langrewriteapp(app, httpreq):
         assert status == 200
         assert response.json == dict(locales=['fa-IR'], arg='')
 
-        when(path='/foo')
+        when(path='/aa/')
         assert status == 200
-        assert response.json == dict(locales=['*'], arg='foo')
+        assert response.json == dict(locales=['*'], arg='aa/')
+
+        when(path='/foo')
+        assert status == 302
+        assert response.headers['location'] == '/en/foo'
 
         when(path='/')
         assert status == 302
         assert response.headers['location'] == '/en'
+
+        when(path='/foo/bar')
+        assert status == 302
+        assert response.headers['location'] == '/en/foo/bar'
 
         when(path='/apiv1')
         assert status == 200
